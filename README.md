@@ -1,4 +1,4 @@
-Rust API for [Optick Profiler](https://github.com/bombomby/optick)
+## Rust API for [Optick Profiler](https://github.com/bombomby/optick)
 
 ## How to use
 
