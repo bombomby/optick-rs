@@ -57,11 +57,11 @@ extern {
         in_value: u64,
     );
 
-    // pub fn OptickAPI_AttachTag_Point(
-    //     in_event_description_id: u64,
-    //     in_x: f32,
-    //     in_y: f32,
-    //     in_z: f32,
-    // );
+    pub fn OptickAPI_AttachTag_Point(
+        in_event_description_id: u64,
+        in_x: f32,
+        in_y: f32,
+        in_z: f32,
+    );
 
 }
