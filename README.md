@@ -1,4 +1,5 @@
-Rust API for [Optick Profiler](https://github.com/bombomby/optick)
+## Rust API for [Optick Profiler](https://github.com/bombomby/optick)
+![](https://optick.dev/images/screenshots/optick/Optick.png)
 
 ## How to use
 
@@ -33,6 +34,25 @@ pub fn main() {
 	
 	// Stop and save current capture 
 	optick::stop_capture("capture_name"); // => Saves capture to {working_dir}/capture_name(date-time).opt
+}
+```
+
+Example gameloop:
+
+```rust
+fn update(frame_num: u32) {
+    optick::event!();
+    optick::tag!("frame", frame_num);
+    std::thread::sleep(std::time::Duration::from_millis(33));
+}
+
+pub fn main() {
+    let mut frame = 0; 
+    loop {
+        optick::next_frame();
+        update(frame);
+        frame = frame + 1;
+    }
 }
 ```
 
