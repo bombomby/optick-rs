@@ -1,4 +1,8 @@
 ## Rust API for [Optick Profiler](https://github.com/bombomby/optick)
+[![Build Status](https://github.com/bombomby/optick-rs/workflows/Rust/badge.svg)](https://github.com/bombomby/optick-rs/actions?workflow=Rust)
+[![Crates.io](https://img.shields.io/crates/v/optick.svg)](https://crates.io/crates/optick)
+[![Docs](https://docs.rs/optick/badge.svg)](https://docs.rs/optick)
+
 ![](https://optick.dev/images/screenshots/optick/Optick.png)
 
 ## How to use
@@ -7,7 +11,7 @@ In `Cargo.toml` add:
 
 ```toml
 [dependencies]
-optick = "1.3.1"
+optick = "1.3.2"
 ```
 
 Example usage:
