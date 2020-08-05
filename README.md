@@ -5,16 +5,21 @@
 
 ![](https://optick.dev/images/screenshots/optick/Optick.png)
 
+## Supported Platforms
+| Windows (x64) | Linux | MacOS |
+| ------------- | ----- | ----- |
+| :heavy_check_mark: | :hourglass_flowing_sand: soon | :hourglass_flowing_sand: soon |
+
 ## How to use
 
 In `Cargo.toml` add:
 
 ```toml
 [dependencies]
-optick = "1.3.2"
+optick = "1.3.3"
 ```
 
-Example usage:
+Example 1 (generic app, automation, etc.):
 
 ```rust
 fn calc(n: u32) {
@@ -36,12 +41,12 @@ pub fn main() {
 
 	calc(42);
 	
-	// Stop and save current capture 
-	optick::stop_capture("capture_name"); // => Saves capture to {working_dir}/capture_name(date-time).opt
+	// Stop and save current capture to {working_dir}/capture_name(date-time).opt
+	optick::stop_capture("capture_name"); 
 }
 ```
 
-Example gameloop:
+Example 2 (game):
 
 ```rust
 fn update(frame_num: u32) {
@@ -63,7 +68,27 @@ pub fn main() {
 ## GUI
 
 Use Optick GUI to open saved *.opt capture for further analysis:
-https://github.com/bombomby/optick/releases
+https://github.com/bombomby/optick/releases <br/>
+After grabbing the latest available Optick_vX.X.X.zip => launch Optick.exe.
+
+## Video Tutorial (Features Overview)
+[![Optick Video Tutorial](https://github.com/bombomby/brofiler/blob/gh-pages/images/VideoThumbnail.jpg)](https://www.youtube.com/watch?v=p57TV5342fo)
+
+## Procedural Macros
+Optick supports a set of procedural macros for simplifying the process of code markup:
+https://crates.io/crates/optick-attr
+```rust
+// Instrument current function
+#[optick_attr::profile]
+fn calc() {
+    // Do some stuff
+}
+//Generate performance capture for function to {working_dir}/capture_name(date-time).opt.
+#[optick_attr::capture("capture_name")]
+pub fn main() {
+    calc();
+}
+```
 
 ## Feature flags
 
