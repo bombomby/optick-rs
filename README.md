@@ -8,7 +8,7 @@
 ## Supported Platforms
 | Windows (x64) | Linux | MacOS |
 | ------------- | ----- | ----- |
-| :heavy_check_mark: | :hourglass_flowing_sand: soon | :hourglass_flowing_sand: soon |
+| YES | NO (IN PROGRESS) | NO (IN PROGRESS) |
 
 ## How to use
 
@@ -16,7 +16,7 @@ In `Cargo.toml` add:
 
 ```toml
 [dependencies]
-optick = "1.3.3"
+optick = "1.3.4"
 ```
 
 Example 1 (generic app, automation, etc.):
@@ -72,7 +72,9 @@ https://github.com/bombomby/optick/releases <br/>
 After grabbing the latest available Optick_vX.X.X.zip => launch Optick.exe.
 
 ## Video Tutorial (Features Overview)
-[![Optick Video Tutorial](https://github.com/bombomby/brofiler/blob/gh-pages/images/VideoThumbnail.jpg)](https://www.youtube.com/watch?v=p57TV5342fo)
+<a href="https://www.youtube.com/watch?v=p57TV5342fo">
+<img border="0" alt="Vide Tutorial" src="https://github.com/bombomby/brofiler/blob/gh-pages/images/VideoThumbnail.jpg" width="100%">
+</a>
 
 ## Procedural Macros
 Optick supports a set of procedural macros for simplifying the process of code markup:
