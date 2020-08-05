@@ -16,26 +16,26 @@
 //! 	// Profile current scope (automatically extracts current function name)
 //!		// You could also specify a custom name if needed - e.g. optick::scope!("calc");
 //!     optick::event!();
-//! 
+//!
 //! 	// Attach custom data tag to the capture (i32, u32, u64, f32, str, vec3)
 //!     optick::tag!("number", n);
 //!     optick::tag!("name", "Bob");
 //!     optick::tag!("position", (10.0f32, -12.0f32, 14.0f32));
-//! 
+//!
 //!		...
 //! }
-//! 
+//!
 //! pub fn main() {
 //! 	// Start a new capture
 //!     optick::start_capture();
 //!     
 //! 	calc(42);
-//! 	
-//! 	// Stop and save current capture 
+//!
+//! 	// Stop and save current capture
 //!     optick::stop_capture("capture_name"); // => Saves capture to {working_dir}/capture_name(date-time).opt
 //! }
 //! ```
-//! 
+//!
 //! ## GUI
 //!
 //! Use Optick GUI to open saved *.opt capture for further analysis:
@@ -44,7 +44,7 @@
 //! ## Feature flags
 //!
 //! - `enable` - this flag is used by default and enables Optick instrumentation
-//! 
+//!
 //! ## Run as Administartor to collect ETW events
 //! Optick uses ETW to collect hardware counters: switch-contexts, auto-sampling, CPU core utilization, etc.
 //! Run your app as administrator to enable the collection of ETW events:
@@ -57,10 +57,10 @@
 mod optick_api;
 
 /// Instrument current scope
-/// 
+///
 /// Note: You could override the name of the function by passing a custom name
 ///
-/// Example: 
+/// Example:
 ///
 /// ```rust
 /// fn calc() {
@@ -72,33 +72,33 @@ mod optick_api;
 #[cfg(all(feature = "enable"))]
 macro_rules! event {
     () => {
-        static mut _OPTICK_EVENT_DESCRIPTION : u64 = 0;
+        static mut _OPTICK_EVENT_DESCRIPTION: u64 = 0;
         let mut _optick_counter = $crate::OptickCounter { event_data: 0 };
         unsafe {
             if _OPTICK_EVENT_DESCRIPTION == 0 {
-                _OPTICK_EVENT_DESCRIPTION = $crate::create_description($crate::function!(), file!(), line!());
-            } 
+                _OPTICK_EVENT_DESCRIPTION =
+                    $crate::create_description($crate::function!(), file!(), line!());
+            }
             _optick_counter.event_data = $crate::push_event(_OPTICK_EVENT_DESCRIPTION);
         }
     };
     ($name:expr) => {
-        static mut _OPTICK_EVENT_DESCRIPTION : u64 = 0;
+        static mut _OPTICK_EVENT_DESCRIPTION: u64 = 0;
         let mut _optick_counter = $crate::OptickCounter { event_data: 0 };
         unsafe {
             if _OPTICK_EVENT_DESCRIPTION == 0 {
                 _OPTICK_EVENT_DESCRIPTION = $crate::create_description($name, file!(), line!());
-            } 
+            }
             _optick_counter.event_data = $crate::push_event(_OPTICK_EVENT_DESCRIPTION);
         }
     };
 }
 
-
 /// Attach custom data to the current scope
-/// 
+///
 /// Note: You could override the name of the function by passing a custom name
 ///
-/// Example: 
+/// Example:
 ///
 /// ```rust
 /// fn calc(number: u32, name: &str) {
@@ -113,15 +113,15 @@ macro_rules! event {
 macro_rules! tag {
     ($name:expr, $value:expr) => {{
         use $crate::OptickTag;
-        static mut _OPTICK_EVENT_DESCRIPTION : u64 = 0;
+        static mut _OPTICK_EVENT_DESCRIPTION: u64 = 0;
         let mut _optick_counter = $crate::OptickCounter { event_data: 0 };
         unsafe {
             if _OPTICK_EVENT_DESCRIPTION == 0 {
                 _OPTICK_EVENT_DESCRIPTION = $crate::create_description($name, file!(), line!());
-            } 
+            }
             $value.attach(_OPTICK_EVENT_DESCRIPTION);
-        }}
-    };
+        }
+    }};
 }
 
 /// Extract current function name
@@ -135,14 +135,14 @@ macro_rules! function {
         }
         let name = type_name_of(f);
         &name[..name.len() - 3]
-    }}
+    }};
 }
 
 /// Scoped event
 #[cfg(all(feature = "enable"))]
 pub struct OptickCounter {
     /// ID of the current event description
-    pub event_data : u64,
+    pub event_data: u64,
 }
 
 /// Destructor for scoped event
@@ -170,7 +170,7 @@ pub fn create_description(name: &str, file: &str, line: u32) -> u64 {
             name.len() as u16,
             file.as_ptr() as *const i8,
             file.len() as u16,
-            line
+            line,
         )
     }
 }
@@ -187,13 +187,13 @@ pub fn push_event(_description: u64) -> u64 {
 pub fn pop_event(_event_data: u64) {
     #[cfg(all(feature = "enable"))]
     unsafe {
-        optick_api::OptickAPI_PopEvent(_event_data); 
+        optick_api::OptickAPI_PopEvent(_event_data);
     }
 }
 
 /// Mark frame update
 ///
-/// Example: 
+/// Example:
 ///
 /// ```rust
 /// fn update() {
@@ -204,7 +204,7 @@ pub fn pop_event(_event_data: u64) {
 pub fn next_frame() {
     #[cfg(all(feature = "enable"))]
     unsafe {
-        static mut _OPTICK_INIT_ONCE : bool = false;
+        static mut _OPTICK_INIT_ONCE: bool = false;
         if _OPTICK_INIT_ONCE == false {
             register_thread("MainThread");
             _OPTICK_INIT_ONCE = true;
@@ -215,7 +215,7 @@ pub fn next_frame() {
 
 /// Register thread for profiling
 ///
-/// Example: 
+/// Example:
 ///
 /// ```rust
 /// optick::register_thread("Thread Name");
@@ -223,10 +223,7 @@ pub fn next_frame() {
 pub fn register_thread(thread: &str) {
     #[cfg(all(feature = "enable"))]
     unsafe {
-        optick_api::OptickAPI_RegisterThread(
-            thread.as_ptr() as *const i8,
-            thread.len() as u16,
-        )
+        optick_api::OptickAPI_RegisterThread(thread.as_ptr() as *const i8, thread.len() as u16)
     }
 }
 
@@ -243,7 +240,7 @@ pub fn start_capture() {
 
 /// Stop and save current capture to the specified path
 ///
-/// Example: 
+/// Example:
 ///
 /// ```rust
 /// pub fn main() {
@@ -269,8 +266,12 @@ pub trait OptickTag {
 impl OptickTag for &str {
     fn attach(&self, description: u64) {
         unsafe {
-            optick_api::OptickAPI_AttachTag_String(description, (*self).as_ptr() as *const i8, (*self).len() as u16);
-        }     
+            optick_api::OptickAPI_AttachTag_String(
+                description,
+                (*self).as_ptr() as *const i8,
+                (*self).len() as u16,
+            );
+        }
     }
 }
 
@@ -278,8 +279,12 @@ impl OptickTag for &str {
 impl OptickTag for String {
     fn attach(&self, description: u64) {
         unsafe {
-            optick_api::OptickAPI_AttachTag_String(description, (*self).as_ptr() as *const i8, (*self).len() as u16);
-        }     
+            optick_api::OptickAPI_AttachTag_String(
+                description,
+                (*self).as_ptr() as *const i8,
+                (*self).len() as u16,
+            );
+        }
     }
 }
 
@@ -288,7 +293,7 @@ impl OptickTag for i32 {
     fn attach(&self, description: u64) {
         unsafe {
             optick_api::OptickAPI_AttachTag_Int32(description, *self);
-        }     
+        }
     }
 }
 
@@ -297,7 +302,7 @@ impl OptickTag for u32 {
     fn attach(&self, description: u64) {
         unsafe {
             optick_api::OptickAPI_AttachTag_UInt32(description, *self);
-        }     
+        }
     }
 }
 
@@ -306,7 +311,7 @@ impl OptickTag for u64 {
     fn attach(&self, description: u64) {
         unsafe {
             optick_api::OptickAPI_AttachTag_UInt64(description, *self);
-        }     
+        }
     }
 }
 
@@ -315,7 +320,7 @@ impl OptickTag for f32 {
     fn attach(&self, description: u64) {
         unsafe {
             optick_api::OptickAPI_AttachTag_Float(description, *self);
-        }     
+        }
     }
 }
 
@@ -324,7 +329,7 @@ impl OptickTag for (f32, f32, f32) {
     fn attach(&self, description: u64) {
         unsafe {
             optick_api::OptickAPI_AttachTag_Point(description, (*self).0, (*self).1, (*self).2);
-        }     
+        }
     }
 }
 

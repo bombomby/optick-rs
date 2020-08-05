@@ -8,7 +8,7 @@ fn update(frame_num: u32) {
 }
 
 pub fn main() {
-    let mut frame = 0; 
+    let mut frame = 0;
     loop {
         optick::next_frame();
         update(frame);
