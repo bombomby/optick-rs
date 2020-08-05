@@ -1,12 +1,12 @@
 [package]
 name = "optick"
-version = "1.3.2"
+version = "1.3.3"
 authors = ["Vadim Slyusarev <vadim@optick.dev>"]
 edition = "2018"
 description = "Super Lightweight Performance Profiler"
 repository = "https://github.com/bombomby/optick-rs"
 keywords = ["profiler", "performance", "optick"]
-categories = ["development-tools::profiling", "api-bindings"]
+categories = ["development-tools::profiling", "game-development", "api-bindings"]
 readme = "README.md"
 license = "MIT"
 
