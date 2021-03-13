@@ -1,18 +1,13 @@
-fn runtime() -> &'static str {
-    if std::env::var("CARGO_CFG_TARGET_FEATURE")
-        .unwrap_or_default()
-        .contains("crt-static")
-    {
-        "MT"
-    } else {
-        "MD"
-    }
-}
-
 fn main() {
-    println!(
-        "cargo:rustc-link-search={}/external/lib/x64/",
-        std::env!("CARGO_MANIFEST_DIR")
-    );
-    println!("cargo:rustc-link-lib=OptickCore_{}", runtime())
+    cc::Build::new()
+        .cpp(true)
+        .flag_if_supported("--std=c++11")
+        .file("optick/src/optick_capi.cpp")
+        .file("optick/src/optick_core.cpp")
+        .file("optick/src/optick_gpu.cpp")
+        .file("optick/src/optick_message.cpp")
+        .file("optick/src/optick_miniz.cpp")
+        .file("optick/src/optick_serialization.cpp")
+        .file("optick/src/optick_server.cpp")
+        .compile("optick");
 }
